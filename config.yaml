@@ -1,0 +1,11 @@
+server:
+  host: 127.0.0.1
+  port: 8000
+
+motion_settings:
+  binary_threshold: 40
+  blur_kernal_size: 5
+  dilate_iterations: 1
+  dilate_kernal_size: 3
+  contour_threshold: 3
+  view_motion: True

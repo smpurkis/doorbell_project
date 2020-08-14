@@ -1,6 +1,6 @@
-import gtts
 from pathlib import Path
-import playsound
+
+import gtts
 import pyttsx3
 import vlc
 
@@ -17,7 +17,7 @@ def tts(text, offline=False, **kwargs):
 
 def tts_online(text, **kwargs):
     if kwargs.get("names"):
-        file_path = Path("audio_files", f"""{"-".join(kwargs.get('names'))}.mp3""")
+        file_path = Path("detection_code", "audio_files", f"""{"-".join(kwargs.get('names'))}.mp3""")
         kwargs.pop("names")
     _tts = gtts.gTTS(text, **kwargs)
     if not file_path.exists():
@@ -25,7 +25,6 @@ def tts_online(text, **kwargs):
         print("saving file", str(file_path))
     p = vlc.MediaPlayer(str(file_path))
     p.play()
-    # playsound.playsound(str(file_path))
 
 
 def tts_offline(text):

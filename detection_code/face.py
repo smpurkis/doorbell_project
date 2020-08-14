@@ -1,5 +1,6 @@
 import face_recognition
 from pathlib import Path
+from fastapi.logger import logger
 import numpy as np
 import cv2
 
@@ -27,12 +28,13 @@ class Face:
         return [self.load_encoding(encoding_path) for encoding_path in encodings_path.glob("*")]
 
     def check_encoding(self, encoding):
-        if encoding.shape != (128):
+        if encoding.shape != (128,):
             encoding = encoding.squeeze(0)
         return encoding
 
     def load_encoding(self, encoding_path):
         if encoding_path.exists() and encoding_path.is_file():
+            logger.info(f"loading encoding: {encoding_path}")
             encoding = np.load(str(encoding_path))
             encoding = self.check_encoding(encoding)
             return encoding
@@ -47,13 +49,16 @@ class Face:
 
     def load_image(self, image_path=False, image_number=None):
         if image_number is not None:
+            logger.info(f"loading image: {image_path}")
             image_path = Path(self.images_path, image_number)
         return cv2.imread(str(image_path))
 
     def save_encoding(self, encoding):
         encoding_path = Path(self.encodings_path, f"{str(self.number_of_images + 1)}")
+        logger.info(f"saving encoding to: {encoding_path}")
         np.save(str(encoding_path), encoding)
 
     def save_image(self, image):
         image_path = Path(self.images_path, f"{str(self.number_of_images + 1)}.png")
+        logger.info(f"saving image to: {image_path}")
         cv2.imwrite(str(image_path), image)
