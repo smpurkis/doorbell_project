@@ -10,3 +10,5 @@ It uses motion detection to then attempts to find any faces in the subsequent fr
 a list of known faces. On a positive detection it announces that person's name. On a negative detection it announces
 that someone is at the door.
 
+It is currently setup as a client (monitoring the video input) and a server (handling the face detection matches and announcements). 
+Plus a good chance to experiment with python server APIs.
