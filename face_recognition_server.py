@@ -9,7 +9,7 @@ from fastapi import FastAPI, File
 from fastapi.logger import logger
 
 from detection_code.face import Face
-from detection_code.utils import name_faces_in_photo, standardize_image_size, load_ultra_fast_model
+from detection_code.utils import name_faces_in_photo, standardize_image_size
 
 
 def get_all_faces(faces_path):
@@ -23,7 +23,7 @@ def get_all_faces(faces_path):
 
 
 class FaceRecognitionServer:
-    def __init__(self, faces_path, ultra=True, **extra: Dict[str, Any]):
+    def __init__(self, faces_path, ultra=False, **extra: Dict[str, Any]):
         super().__init__(**extra)
         self.known_faces = get_all_faces(faces_path)
         self.ultra = ultra
@@ -61,9 +61,12 @@ class FaceRecognitionServer:
         async def recognise_faces(file: bytes = File(...)):
             image = cv2.imdecode(np.frombuffer(file, np.uint8), -1)
             image = standardize_image_size(image)
-            faces = name_faces_in_photo(image, self.known_faces, self.ultra,
-                                        ort_session=self.ort_session,
-                                        input_name=self.input_name)
+            if self.ultra:
+                faces = name_faces_in_photo(image, self.known_faces, self.ultra,
+                                            ort_session=self.ort_session,
+                                            input_name=self.input_name)
+            else:
+                faces = name_faces_in_photo(image, self.known_faces, self.ultra)
             if len(faces) == 0:
                 return faces
             faces = self._get_new_faces(faces)
@@ -71,7 +74,7 @@ class FaceRecognitionServer:
             return faces
 
 
-server = FaceRecognitionServer("faces").app
+server = FaceRecognitionServer("detection_code/faces").app
 
 
 def run_server():

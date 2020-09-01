@@ -1,26 +1,25 @@
 import cv2
 import face_recognition
 import numpy as np
-import onnx
-import onnxruntime as ort
-from caffe2.python.onnx import backend
+# import onnx
+# import onnxruntime as ort
+# from pathlib import Path
 
 import detection_code.box_utils_numpy as box_utils
 
 
-def load_ultra_fast_model():
-    onnx_path = "version-RFB-320.onnx"
-    class_names = ["BACKGROUND", "face"]
-    predictor = onnx.load(onnx_path)
-    onnx.checker.check_model(predictor)
-    onnx.helper.printable_graph(predictor.graph)
-    predictor = backend.prepare(predictor, device="CPU")  # default CPU
-    session_options = ort.SessionOptions()
-    session_options.log_severity_level = 3
-
-    ort_session = ort.InferenceSession(onnx_path, session_options)
-    input_name = ort_session.get_inputs()[0].name
-    return ort_session, input_name
+# def load_ultra_fast_model():
+#     onnx_path = Path("detection_code", "version-RFB-320.onnx").as_posix()
+#     class_names = ["BACKGROUND", "face"]
+#     predictor = onnx.load(onnx_path)
+#     onnx.checker.check_model(predictor)
+#     onnx.helper.printable_graph(predictor.graph)
+#     session_options = ort.SessionOptions()
+#     session_options.log_severity_level = 3
+#
+#     ort_session = ort.InferenceSession(onnx_path, session_options)
+#     input_name = ort_session.get_inputs()[0].name
+#     return ort_session, input_name
 
 
 def standardize_image_size(image, image_resolution=480):
@@ -108,6 +107,7 @@ def get_face_encodings_ultra_fast(image, **kwargs):
 
 def name_faces_in_photo(image, known_faces, ultra=False, **kwargs):
     if ultra:
+        print("get here")
         unknown_face_encodings, ultra_faces = get_face_encodings_ultra_fast(image, **kwargs)
         faces_in_photo = []
         for index, unknown_face_encoding in enumerate(unknown_face_encodings):
