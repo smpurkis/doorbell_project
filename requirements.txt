@@ -7,5 +7,5 @@ gTTS==2.1.1
 opencv_python
 pyttsx3==2.90
 numpy==1.19.1
-PyYAML==5.3.1
+PyYAML==5.4
 python-multipart==0.0.5
