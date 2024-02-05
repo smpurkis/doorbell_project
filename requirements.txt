@@ -1,4 +1,4 @@
-fastapi==0.65.2
+fastapi==0.109.1
 python_vlc==3.0.11115
 httpx==0.14.1
 uvicorn==0.11.8
